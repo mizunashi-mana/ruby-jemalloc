@@ -3,7 +3,7 @@
 set -euo pipefail
 [ "${TRACE:-false}" = 'true' ] && set -x
 
-SCRIPT_DIR="$(cd "$(dirname "$0")"; pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "${SCRIPT_DIR}/env.bash"
 
 mkdir -p "${SOURCE_DIR}"
