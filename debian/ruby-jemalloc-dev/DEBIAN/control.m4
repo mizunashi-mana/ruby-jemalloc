@@ -7,7 +7,7 @@ Multi-Arch: allowed
 Architecture: __ARCH__
 Standards-Version: 4.5.1
 Homepage: https://www.ruby-lang.org/
-Depends:    libc,
+Depends:    libc6-dev,
             libffi-dev,
             libgdbm-compat-dev,
             libgdbm-dev,
