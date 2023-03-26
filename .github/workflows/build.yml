@@ -16,5 +16,5 @@ jobs:
             -   name: Build Ruby
                 run: ./scripts/build-source
 
-            -   name: Build Debs
+            -   name: Build deb
                 run: ./scripts/build-deb
