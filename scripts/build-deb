@@ -6,40 +6,30 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "${SCRIPT_DIR}/env.bash"
 
+DEB_HOST_ARCH="$(dpkg-architecture -qDEB_HOST_ARCH)"
+
 apt install -y \
     rsync
 
 cd "${INSTALL_DIR}"
 
-mkdir -p "${INSTALL_DIR}/ruby-jemalloc/DEBIAN"
-rsync --recursive --relative \
+mkdir -p "${INSTALL_DIR}/ruby-jemalloc-dev/DEBIAN"
+rsync --recursive --relative --links \
     usr/bin \
     usr/share/man \
-    "${INSTALL_DIR}/ruby-jemalloc/"
-m4 "-D__VERSION__=${VERSION}" \
-    "${ASSETS_DIR}/ruby-jemalloc/DEBIAN/control.m4" \
-    > "${INSTALL_DIR}/ruby-jemalloc/DEBIAN/control"
-
-mkdir -p "${INSTALL_DIR}/libruby-jemalloc/DEBIAN"
-rsync --recursive --relative \
+    usr/include \
     usr/lib/*/*.so.* \
+    usr/lib/*/pkgconfig \
     usr/lib/*/ruby \
     usr/lib/ruby \
-    "${INSTALL_DIR}/libruby-jemalloc/"
-m4 "-D__VERSION__=${VERSION}" \
-    "${ASSETS_DIR}/libruby-jemalloc/DEBIAN/control.m4" \
-    > "${INSTALL_DIR}/libruby-jemalloc/DEBIAN/control"
-
-mkdir -p "${INSTALL_DIR}/ruby-jemalloc-dev/DEBIAN"
-rsync --recursive --relative \
-    usr/include \
-    usr/lib/*/*.so \
-    usr/lib/*/pkgconfig \
     "${INSTALL_DIR}/ruby-jemalloc-dev/"
-m4 "-D__VERSION__=${VERSION}" \
+
+for bin_path in "${INSTALL_DIR}/ruby-jemalloc-dev/usr/bin"/*; do
+    ln -sf "$(basename "${bin_path}")" "${bin_path%%-jemalloc}"
+done
+
+m4 "-D__ARCH__=${DEB_HOST_ARCH}" \
     "${ASSETS_DIR}/ruby-jemalloc-dev/DEBIAN/control.m4" \
     > "${INSTALL_DIR}/ruby-jemalloc-dev/DEBIAN/control"
 
-dpkg-deb --build "${INSTALL_DIR}/ruby-jemalloc/" .
-dpkg-deb --build "${INSTALL_DIR}/libruby-jemalloc/" .
 dpkg-deb --build "${INSTALL_DIR}/ruby-jemalloc-dev/" .

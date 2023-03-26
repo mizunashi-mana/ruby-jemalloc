@@ -12,11 +12,10 @@ mkdir -p "${WORK_DIR}"
 mkdir -p "${ASSETS_DIR}"
 EOS
 
-COPY ruby-jemalloc "${ASSETS_DIR}/ruby-jemalloc"
-COPY libruby-jemalloc "${ASSETS_DIR}/libruby-jemalloc"
-COPY ruby-jemalloc-dev "${ASSETS_DIR}/ruby-jemalloc-dev"
-
-COPY scripts "${WORK_DIR}/scripts"
-
+COPY scripts/env.bash "${WORK_DIR}/scripts/env.bash"
+COPY scripts/build-source "${WORK_DIR}/scripts/build-source"
 RUN env TRACE=true "${WORK_DIR}/scripts/build-source"
+
+COPY scripts/build-deb "${WORK_DIR}/scripts/build-deb"
+COPY ruby-jemalloc-dev "${ASSETS_DIR}/ruby-jemalloc-dev"
 RUN env TRACE=true "${WORK_DIR}/scripts/build-deb"
