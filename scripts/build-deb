@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+[ "${TRACE:-false}" = 'true' ] && set -x
+
+SCRIPT_DIR="$(cd "$(dirname "$0")"; pwd)"
+source "${SCRIPT_DIR}/env.bash"
+
+apt install -y \
+    rsync
+
+cd "${INSTALL_DIR}"
+
+mkdir -p "${INSTALL_DIR}/ruby-jemalloc/DEBIAN"
+rsync --recursive --relative \
+    usr/bin \
+    usr/share/man \
+    "${INSTALL_DIR}/ruby-jemalloc/"
+m4 "-D__VERSION__=${VERSION}" \
+    "${ASSETS_DIR}/ruby-jemalloc/DEBIAN/control.m4" \
+    > "${INSTALL_DIR}/ruby-jemalloc/DEBIAN/control"
+
+mkdir -p "${INSTALL_DIR}/libruby-jemalloc/DEBIAN"
+rsync --recursive --relative \
+    usr/lib/*/*.so.* \
+    usr/lib/*/ruby \
+    usr/lib/ruby \
+    "${INSTALL_DIR}/libruby-jemalloc/"
+m4 "-D__VERSION__=${VERSION}" \
+    "${ASSETS_DIR}/libruby-jemalloc/DEBIAN/control.m4" \
+    > "${INSTALL_DIR}/libruby-jemalloc/DEBIAN/control"
+
+mkdir -p "${INSTALL_DIR}/ruby-jemalloc-dev/DEBIAN"
+rsync --recursive --relative \
+    usr/include \
+    usr/lib/*/*.so \
+    usr/lib/*/pkgconfig \
+    "${INSTALL_DIR}/ruby-jemalloc-dev/"
+m4 "-D__VERSION__=${VERSION}" \
+    "${ASSETS_DIR}/ruby-jemalloc-dev/DEBIAN/control.m4" \
+    > "${INSTALL_DIR}/ruby-jemalloc-dev/DEBIAN/control"
+
+dpkg-deb --build "${INSTALL_DIR}/ruby-jemalloc/" .
+dpkg-deb --build "${INSTALL_DIR}/libruby-jemalloc/" .
+dpkg-deb --build "${INSTALL_DIR}/ruby-jemalloc-dev/" .
