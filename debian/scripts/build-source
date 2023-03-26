@@ -52,7 +52,7 @@ apt install -y \
 cd "${SOURCE_DIR}"
 
 ./configure \
-    "--prefix=${INSTALL_DIR}/usr" \
+    "--prefix=/usr" \
     --enable-multiarch \
     "--target=${DEB_HOST_MULTIARCH}" \
     "--program-suffix=${SUFFIX}" \
@@ -62,7 +62,7 @@ cd "${SOURCE_DIR}"
     --with-sitedir=/usr/local/lib/site_ruby \
     "--with-sitearchdir=/usr/local/lib/${DEB_HOST_MULTIARCH}/site_ruby" \
     --runstatedir=/var/run \
-    "--localstatedir=${INSTALL_DIR}/var" \
+    "--localstatedir=/var" \
     --sysconfdir=/etc \
     --enable-ipv6 \
     --with-jemalloc \
@@ -72,10 +72,10 @@ cd "${SOURCE_DIR}"
     "CC=${DEB_BUILD_GNU_TYPE}-gcc" \
     "CXX=${DEB_BUILD_GNU_TYPE}-g++" \
     "LD=${DEB_BUILD_GNU_TYPE}-ld" \
-    EGREP='/bin/grep -E' \
-    GREP='/bin/grep' \
-    MAKEDIRS='/bin/mkdir -p' \
-    MKDIR_P='/bin/mkdir -p' \
-    SHELL='/bin/sh'
+    'EGREP=/bin/grep -E' \
+    'GREP=/bin/grep' \
+    'MAKEDIRS=/bin/mkdir -p' \
+    'MKDIR_P=/bin/mkdir -p' \
+    'SHELL=/bin/sh'
 
-make install
+make "DESTDIR=${INSTALL_DIR}" install
