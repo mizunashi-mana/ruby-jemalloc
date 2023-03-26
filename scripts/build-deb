@@ -6,7 +6,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "${SCRIPT_DIR}/env.bash"
 
-DEB_HOST_ARCH="$(dpkg-architecture -qDEB_HOST_ARCH)"
+TARGET_ARCH="${TARGET_ARCH:-"$(dpkg-architecture -qDEB_HOST_ARCH)"}"
 
 apt install -y \
     rsync
@@ -28,8 +28,9 @@ for bin_path in "${INSTALL_DIR}/ruby-jemalloc-dev/usr/bin"/*; do
     ln -sf "$(basename "${bin_path}")" "${bin_path%%-jemalloc}"
 done
 
-m4 "-D__ARCH__=${DEB_HOST_ARCH}" \
+m4 "-D__ARCH__=${TARGET_ARCH}" \
     "${ASSETS_DIR}/ruby-jemalloc-dev/DEBIAN/control.m4" \
     > "${INSTALL_DIR}/ruby-jemalloc-dev/DEBIAN/control"
 
-dpkg-deb --build "${INSTALL_DIR}/ruby-jemalloc-dev/" .
+# Ubuntu use zstd by default and Debian failed to unpack zstd archive.
+dpkg-deb -Zgzip --build "${INSTALL_DIR}/ruby-jemalloc-dev/" .
