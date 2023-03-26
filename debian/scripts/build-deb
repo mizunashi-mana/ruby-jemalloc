@@ -29,7 +29,7 @@ for bin_path in "${INSTALL_DIR}/ruby-jemalloc-dev/usr/bin"/*; do
 done
 
 m4 "-D__ARCH__=${TARGET_ARCH}" \
-    "${WORK_DIR}/ruby-jemalloc-dev/DEBIAN/control.m4" \
+    "${SCRIPT_DIR}/../ruby-jemalloc-dev/DEBIAN/control.m4" \
     > "${INSTALL_DIR}/ruby-jemalloc-dev/DEBIAN/control"
 
 # Ubuntu use zstd by default and Debian failed to unpack zstd archive.
