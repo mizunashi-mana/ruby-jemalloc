@@ -17,3 +17,5 @@ RUN env TRACE=true "${WORK_DIR}/scripts/build-source"
 COPY scripts/build-deb "${WORK_DIR}/scripts/build-deb"
 COPY ruby-jemalloc-dev "${WORK_DIR}/ruby-jemalloc-dev"
 RUN env TRACE=true "${WORK_DIR}/scripts/build-deb"
+
+COPY scripts/test "${WORK_DIR}/scripts/test"

@@ -22,11 +22,8 @@ jobs:
             -   name: Build deb
                 run: env TRACE=true ./debian/scripts/build-deb
 
-            -   name: Install testing
-                run: apt install -y ./install/*.deb
-
-            -   name: Show Ruby version
-                run: ruby --version && /usr/bin/ruby-jemalloc --version
+            -   name: Test
+                run: env TRACE=true ./debian/scripts/test
 
             -   name: Release
                 uses: softprops/action-gh-release@v1

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+[ "${TRACE:-false}" = 'true' ] && set -x
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "${SCRIPT_DIR}/env.bash"
+
+apt install -y "${INSTALL_DIR}/"ruby-jemalloc-dev_*.deb
+
+ruby --version
+/usr/bin/ruby-jemalloc --version
+
+env LD_PRELOAD=libjemalloc.so ruby --version
+
+ruby -e 'print "Hello, World!\n"'

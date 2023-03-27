@@ -16,6 +16,7 @@ cd "${INSTALL_DIR}"
 mkdir -p "${INSTALL_DIR}/ruby-jemalloc-dev/DEBIAN"
 rsync --recursive --relative --links \
     usr/bin \
+    usr/local/bin \
     usr/share/man \
     usr/include \
     usr/lib/*/*.so.* \
@@ -23,10 +24,6 @@ rsync --recursive --relative --links \
     usr/lib/*/ruby \
     usr/lib/ruby \
     "${INSTALL_DIR}/ruby-jemalloc-dev/"
-
-for bin_path in "${INSTALL_DIR}/ruby-jemalloc-dev/usr/bin"/*; do
-    ln -sf "/usr/bin/$(basename "${bin_path}")" "/usr/local/bin/$(basename "${bin_path}" '-jemalloc')"
-done
 
 m4 "-D__ARCH__=${TARGET_ARCH}" \
     "${SCRIPT_DIR}/../ruby-jemalloc-dev/DEBIAN/control.m4" \
