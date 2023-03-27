@@ -1,5 +1,5 @@
 Package: ruby-jemalloc-dev
-Version: 3.2.1-1
+Version: 3.2.1-2
 Section: ruby
 Priority: optional
 Maintainer: Mizunashi Mana <mizunashi-mana@noreply.git>

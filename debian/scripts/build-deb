@@ -25,7 +25,7 @@ rsync --recursive --relative --links \
     "${INSTALL_DIR}/ruby-jemalloc-dev/"
 
 for bin_path in "${INSTALL_DIR}/ruby-jemalloc-dev/usr/bin"/*; do
-    ln -sf "$(basename "${bin_path}")" "${bin_path%%-jemalloc}"
+    ln -sf "/usr/bin/$(basename "${bin_path}")" "/usr/local/bin/$(basename "${bin_path}" '-jemalloc')"
 done
 
 m4 "-D__ARCH__=${TARGET_ARCH}" \
