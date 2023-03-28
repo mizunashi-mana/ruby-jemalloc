@@ -19,6 +19,7 @@ rsync --recursive --relative --links \
     usr/local/bin \
     usr/share/man \
     usr/include \
+    usr/lib/*/*.so \
     usr/lib/*/*.so.* \
     usr/lib/*/pkgconfig \
     usr/lib/*/ruby \
