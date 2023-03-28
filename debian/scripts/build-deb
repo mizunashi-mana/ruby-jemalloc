@@ -25,7 +25,9 @@ rsync --recursive --relative --links \
     usr/lib/ruby \
     "${INSTALL_DIR}/ruby-jemalloc-dev/"
 
-m4 "-D__ARCH__=${TARGET_ARCH}" \
+m4 \
+    "-D__ARCH__=${TARGET_ARCH}" \
+    "-D__VERSION__=${PKG_VERSION}" \
     "${SCRIPT_DIR}/../ruby-jemalloc-dev/DEBIAN/control.m4" \
     > "${INSTALL_DIR}/ruby-jemalloc-dev/DEBIAN/control"
 
